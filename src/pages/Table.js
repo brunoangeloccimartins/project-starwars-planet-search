@@ -1,23 +1,14 @@
 import { useEffect, useState } from 'react';
 
 function Table() {
-  const [tableColumn, setTableColumn] = useState([]);
-  const [tableContent, setTableContent] = useState([]);
-
-  const callApi = async () => {
-    const response = await fetch('https://swapi.dev/api/planets');
-    const data = await response.json();
-    const keys = data.results[0];
-    const columns = Object.keys(keys).filter((header) => header !== 'residents');
-    setTableContent(data.results);
-    setTableColumn(columns);
-  };
-
-  useEffect(() => {
-    callApi();
-  }, []);
-
+  
   return (
+    <main>
+    <header>
+    <input
+    type='text'
+    data-testid='name-filter'/>
+    </header>
     <table>
       <thead>
         <tr>
@@ -36,6 +27,7 @@ function Table() {
         ))}
       </tbody>
     </table>
+    </main>
   );
 }
 
