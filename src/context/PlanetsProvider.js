@@ -12,7 +12,6 @@ export default function PlanetsProvider({ children }) {
       delete element.residents;
       return element;
     });
-    console.log(results);
     setPlanetFilter(results);
   };
 

@@ -1,16 +1,26 @@
-import { useContext } from 'react';
-import planetsContext from '../context/planetsContext';
+import { useContext, useEffect } from 'react';
+import PlanetsContext from '../context/planetsContext';
 
 function Table() {
-  const { planetFilter } = useContext(planetsContext);
+  const { planetFilter, callApi } = useContext(PlanetsContext);
+  const header = planetFilter[0];
+
+  useEffect(() => {
+    callApi();
+  }, []);
+
+  if (header === undefined) {
+    return (<p>Loading</p>);
+  }
 
   return (
     <table>
       <thead>
         <tr>
-          {Object.keys(planetFilter[0]).map((key) => (
-            <th key={ key }>{key}</th>
-          ))}
+          {Object.keys(header).map((element) => (
+            <th key={ element }>
+              {element.toUpperCase()}
+            </th>))}
         </tr>
       </thead>
       <tbody>
