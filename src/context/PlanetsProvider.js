@@ -15,7 +15,7 @@ export default function PlanetsProvider({ children }) {
     setPlanetFilter(results);
   };
 
-  const value = { planetFilter, callApi };
+  const value = { planetFilter,setPlanetFilter, callApi };
 
   return (
     <PlanetsContext.Provider value={ value }>{children}</PlanetsContext.Provider>
