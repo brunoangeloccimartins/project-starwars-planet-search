@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import propTypes from 'prop-types';
-import planetsContext from './planetsContext';
+import PlanetsContext from './planetsContext';
 
 export default function PlanetsProvider({ children }) {
   const [planetFilter, setPlanetFilter] = useState([]);
@@ -12,13 +12,14 @@ export default function PlanetsProvider({ children }) {
       delete element.residents;
       return element;
     });
+    console.log(results);
     setPlanetFilter(results);
   };
 
   const value = { planetFilter, callApi };
 
   return (
-    <planetsContext.Provider value={ value }>{children}</planetsContext.Provider>
+    <PlanetsContext.Provider value={ value }>{children}</PlanetsContext.Provider>
   );
 }
 

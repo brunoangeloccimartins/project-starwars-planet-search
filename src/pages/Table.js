@@ -1,33 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import planetsContext from '../context/planetsContext';
 
 function Table() {
-  
+  const { planetFilter } = useContext(planetsContext);
+
   return (
-    <main>
-    <header>
-    <input
-    type='text'
-    data-testid='name-filter'/>
-    </header>
     <table>
       <thead>
         <tr>
-          {tableColumn.map((element) => (
-            <th key={ element }>{element}</th>
+          {Object.keys(planetFilter[0]).map((key) => (
+            <th key={ key }>{key}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {tableContent.map((element, index) => (
-          <tr key={ index }>
-            {tableColumn.map((column) => (
-              <td key={ column }>{element[column]}</td>
+        {planetFilter.map((planet) => (
+          <tr key={ planet.name }>
+            {Object.values(planet).map((value) => (
+              <td key={ value }>{value}</td>
             ))}
           </tr>
         ))}
       </tbody>
     </table>
-    </main>
   );
 }
 
