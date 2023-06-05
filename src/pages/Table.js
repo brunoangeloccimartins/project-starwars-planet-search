@@ -6,7 +6,15 @@ function Table() {
   const header = planetFilter[0];
 
   const [inputValue, setInputValue] = useState({});
-  const [filteredPlanets, setFilteredPlanets] = useState(planetFilter);
+  const [filteredData, setFilteredData] = useState(planetFilter);
+  const [columnSelect, setColumnSelect] = useState('population');
+  const [comparisonSelect, setComparisonSelect] = useState('maior que');
+  const [numberInput, setNumberInput] = useState('0');
+
+  const column = ['population',
+    'orbital_period', 'surface_water',
+    'diameter', 'rotation_period'];
+  const comparison = ['maior que', 'menor que', 'igual a'];
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -19,10 +27,32 @@ function Table() {
 
   const handleFilter = () => {
     const input = inputValue['name-filter'];
-    const filteredData = planetFilter.filter((item) => !(input
-      && input.length !== 0
-      && !item.name.toLowerCase().includes(input.toLowerCase())));
-    setFilteredPlanets(filteredData);
+    const filteredPlanets = planetFilter.filter(
+      (item) => !(input && input.length !== 0
+        && !item.name.toLowerCase().includes(input.toLowerCase())),
+    );
+    setFilteredData(filteredPlanets);
+  };
+
+  const handleClick = () => {
+    const selectedColumn = columnSelect;
+    const selectedComparison = comparisonSelect;
+    const selectedNumber = Number(numberInput);
+
+    const filtered = planetFilter.filter((planet) => {
+      const columnValue = Number(planet[selectedColumn]);
+
+      if (selectedComparison === 'maior que') {
+        return columnValue > selectedNumber;
+      } if (selectedComparison === 'menor que') {
+        return columnValue < selectedNumber;
+      } if (selectedComparison === 'igual a') {
+        return columnValue === selectedNumber;
+      }
+      return true;
+    });
+
+    setFilteredData(filtered);
   };
 
   useEffect(() => {
@@ -32,8 +62,10 @@ function Table() {
   useEffect(() => {
     if (inputValue['name-filter']?.length !== 0) {
       handleFilter();
+    } else {
+      setFilteredData(planetFilter);
     }
-  }, [inputValue]);
+  }, [inputValue, planetFilter]);
 
   if (header === undefined) {
     return <p>Loading</p>;
@@ -51,6 +83,35 @@ function Table() {
         value={ nameFilter }
         onChange={ handleChange }
       />
+      <select
+        data-testid="column-filter"
+        onChange={ (e) => setColumnSelect(e.target.value) }
+      >
+        {column.map((element) => (
+          <option key={ element } value={ element }>
+            {element}
+          </option>
+        ))}
+      </select>
+      <select
+        data-testid="comparison-filter"
+        onChange={ (e) => setComparisonSelect(e.target.value) }
+      >
+        {comparison.map((element) => (
+          <option key={ element } value={ element }>
+            {element}
+          </option>
+        ))}
+      </select>
+      <input
+        type="number"
+        value={ numberInput }
+        onChange={ (e) => setNumberInput(e.target.value) }
+        data-testid="value-filter"
+      />
+      <button onClick={ handleClick } data-testid="button-filter">
+        Filtrar
+      </button>
       <table>
         <thead>
           <tr>
@@ -60,21 +121,13 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {(nameFilter === '' || nameFilter === undefined)
-            ? planetFilter.map((planet) => (
-              <tr key={ planet.name }>
-                {Object.values(planet).map((value) => (
-                  <td key={ value }>{value}</td>
-                ))}
-              </tr>
-            ))
-            : filteredPlanets.map((planet) => (
-              <tr key={ planet.name }>
-                {Object.values(planet).map((value) => (
-                  <td key={ value }>{value}</td>
-                ))}
-              </tr>
-            ))}
+          {filteredData.map((planet) => (
+            <tr key={ planet.name }>
+              {Object.values(planet).map((value) => (
+                <td key={ value }>{value}</td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </main>
