@@ -3,19 +3,19 @@ import propTypes from 'prop-types';
 import PlanetsContext from './planetsContext';
 
 export default function PlanetsProvider({ children }) {
-  const [planetFilter, setPlanetFilter] = useState([]);
+  const [planets, setPlanets] = useState([]);
 
   const callApi = async () => {
     const response = await fetch('https://swapi.dev/api/planets');
-    let { results } = await response.json();
-    results = results.map((element) => {
+    const { results } = await response.json();
+    results.forEach((element) => {
       delete element.residents;
-      return element;
     });
-    setPlanetFilter(results);
+    setPlanets(results);
   };
 
-  const value = { planetFilter, setPlanetFilter, callApi };
+  callApi();
+  const value = { planets, setPlanets, callApi };
 
   return (
     <PlanetsContext.Provider value={ value }>{children}</PlanetsContext.Provider>
