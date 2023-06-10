@@ -13,7 +13,7 @@ function Table() {
   const [comparisonSelect, setComparisonSelect] = useState('maior que');
   const [numberInput, setNumberInput] = useState('0');
   const [filters, setFilters] = useState([]);
-  const [avaiableOptions, setAvaiableOptions] = useState(column);
+  const [availableColumns, setAvailableColumns] = useState(column);
 
   const handleClick = () => {
     const filterObject = {
@@ -21,10 +21,18 @@ function Table() {
       selectedComparison: comparisonSelect,
       selectedNumber: numberInput,
     };
-
     setFilters([...filters, filterObject]);
-    setAvaiableOptions(avaiableOptions
-      .filter((col) => col !== filterObject.selectedColumn));
+
+    const updatedColumns = availableColumns.filter((col) => col !== columnSelect);
+    setAvailableColumns(updatedColumns);
+
+    if (updatedColumns.length > 0) {
+      setColumnSelect(updatedColumns[0]);
+    } else {
+      setColumnSelect('');
+    }
+    setComparisonSelect('maior que');
+    setNumberInput('0');
   };
 
   useEffect(() => {}, []);
@@ -47,7 +55,7 @@ function Table() {
             data-testid="column-filter"
             onChange={ (e) => setColumnSelect(e.target.value) }
           >
-            {avaiableOptions.map((element) => (
+            {availableColumns.map((element) => (
               <option key={ element } value={ element }>
                 {element}
               </option>
