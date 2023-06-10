@@ -3,17 +3,17 @@ import PlanetsContext from '../context/planetsContext';
 
 function Table() {
   const { planets } = useContext(PlanetsContext);
+  const column = ['population',
+    'orbital_period', 'surface_water',
+    'diameter', 'rotation_period'];
+  const comparison = ['maior que', 'menor que', 'igual a'];
 
   const [inputValue, setInputValue] = useState('');
   const [columnSelect, setColumnSelect] = useState('population');
   const [comparisonSelect, setComparisonSelect] = useState('maior que');
   const [numberInput, setNumberInput] = useState('0');
   const [filters, setFilters] = useState([]);
-
-  const column = ['population',
-    'orbital_period', 'surface_water',
-    'diameter', 'rotation_period'];
-  const comparison = ['maior que', 'menor que', 'igual a'];
+  const [avaiableOptions, setAvaiableOptions] = useState(column);
 
   const handleClick = () => {
     const filterObject = {
@@ -23,10 +23,11 @@ function Table() {
     };
 
     setFilters([...filters, filterObject]);
+    setAvaiableOptions(avaiableOptions
+      .filter((col) => col !== filterObject.selectedColumn));
   };
 
   useEffect(() => {}, []);
-
   return (
     <main>
       <div className="container">
@@ -46,7 +47,7 @@ function Table() {
             data-testid="column-filter"
             onChange={ (e) => setColumnSelect(e.target.value) }
           >
-            {column.map((element) => (
+            {avaiableOptions.map((element) => (
               <option key={ element } value={ element }>
                 {element}
               </option>
@@ -81,7 +82,9 @@ function Table() {
         {filters && (
           <div>
             {filters.map((filter) => (
-              <p key={ filter.selectedColumn }>
+              <p
+                key={ filter.selectedColumn }
+              >
                 {`Selected Column: ${filter.selectedColumn},
                  Selected Comparison: ${filter.selectedComparison},
                   Selected Number: ${filter.selectedNumber}`}
