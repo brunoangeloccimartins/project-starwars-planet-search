@@ -3,6 +3,7 @@ import PlanetsContext from '../context/planetsContext';
 
 function Table() {
   const { planets } = useContext(PlanetsContext);
+  console.log(planets);
   const column = ['population',
     'orbital_period', 'surface_water',
     'diameter', 'rotation_period'];
@@ -33,6 +34,17 @@ function Table() {
     }
     setComparisonSelect('maior que');
     setNumberInput('0');
+  };
+
+  const handleRemoveFilter = (index) => {
+    const removeFilter = filters.filter((x, ind) => ind !== index);
+    setFilters(removeFilter);
+    setAvailableColumns([...availableColumns, filters[index].selectedColumn]);
+  };
+
+  const handleRemoveAllFilters = () => {
+    setFilters([]);
+    setAvailableColumns(column);
   };
 
   useEffect(() => {}, []);
@@ -89,18 +101,35 @@ function Table() {
         </div>
         {filters && (
           <div>
-            {filters.map((filter) => (
-              <p
-                key={ filter.selectedColumn }
+            {filters.map((filter, index) => (
+              <div
+                key={ index }
+                data-testid="filter"
               >
-                {`Selected Column: ${filter.selectedColumn},
+                <p
+                  key={ filter.selectedColumn }
+                >
+                  {`Selected Column: ${filter.selectedColumn},
                  Selected Comparison: ${filter.selectedComparison},
                   Selected Number: ${filter.selectedNumber}`}
-              </p>
+                </p>
+                <button
+                  onClick={ () => handleRemoveFilter(index) }
+                >
+                  X
+                </button>
+              </div>
             ))}
 
           </div>
         )}
+        <button
+          onClick={ handleRemoveAllFilters }
+          data-testid="button-remove-filters"
+        >
+          Remover filtragens
+
+        </button>
         { planets.length
           ? (
             <table>
@@ -145,6 +174,10 @@ function Table() {
                        <td>{planet.terrain}</td>
                        <td>{planet.surface_water}</td>
                        <td>{planet.population}</td>
+                       <td>{planet.films}</td>
+                       <td>{planet.created}</td>
+                       <td>{planet.edited}</td>
+                       <td>{planet.url}</td>
                      </tr>
                    ))}
               </tbody>
