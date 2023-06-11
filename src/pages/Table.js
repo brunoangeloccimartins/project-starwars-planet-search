@@ -3,7 +3,7 @@ import PlanetsContext from '../context/planetsContext';
 
 function Table() {
   const { planets } = useContext(PlanetsContext);
-  console.log(planets);
+
   const column = ['population',
     'orbital_period', 'surface_water',
     'diameter', 'rotation_period'];
@@ -111,7 +111,7 @@ function Table() {
                 >
                   {`Selected Column: ${filter.selectedColumn},
                  Selected Comparison: ${filter.selectedComparison},
-                  Selected Number: ${filter.selectedNumber}`}
+                 Selected Number: ${filter.selectedNumber}`}
                 </p>
                 <button
                   onClick={ () => handleRemoveFilter(index) }
@@ -130,20 +130,21 @@ function Table() {
           Remover filtragens
 
         </button>
-        { planets.length
-          ? (
-            <table>
-              <thead>
-                <tr>
-                  {planets.length > 0 && Object.keys(planets[0]).map((element) => (
-                    <th key={ element }>{element}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody
-                className="table-body"
-              >
-                {planets.length > 0
+      </div>
+      {/* { planets.length
+        ? ( */}
+      <table>
+        <thead>
+          <tr>
+            {planets.length > 0 && Object.keys(planets[0]).map((element) => (
+              <th key={ element }>{element}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody
+          className="table-body"
+        >
+          {planets.length > 0
                  && planets.filter((planet) => planet.name.toLowerCase()
                    .includes(inputValue.toLowerCase()))
                    .filter((planet) => filters
@@ -180,10 +181,10 @@ function Table() {
                        <td>{planet.url}</td>
                      </tr>
                    ))}
-              </tbody>
-            </table>)
-          : <p>Loading</p>}
-      </div>
+        </tbody>
+      </table>
+      {/* :
+         <p data-testid="loading">Loading</p>} */}
     </main>
   );
 }
